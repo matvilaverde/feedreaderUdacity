@@ -1,3 +1,6 @@
+// This project is still missing comments and README because it's not the final version!
+// I have some problems on the last tests and am asking somethings directly to you guys! :)
+// By the way, should I leave the TODOs in the final version or is it optional?
 $(function() {
     describe('RSS Feeds', function() {
         it('are defined', function() {
@@ -50,9 +53,11 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
         it('hides and shows menu', function() {
-            $('.menu-icon-link').trigger('click');
+            const menuIcon = $('.menu-icon-link');
+
+            menuIcon.click();
             expect(bodyTag).not.toHaveClass('menu-hidden');
-            $('.menu-icon-link').trigger('click');
+            menuIcon.click();
             expect(bodyTag).toHaveClass('menu-hidden');
         });
     });
@@ -73,28 +78,27 @@ $(function() {
         });
 
         /* 
-            Oi, senhor(a) revisor(a)! Estou com um problema. O beforeEach,
-            acima, está mostrando a tela de specs/failures de uma forma
-            muita estranha para mim. Eu testei essa tarefa em outro projeto
-            clonado do zero, também enviei ao meu instrutor e o erro é somente
-            comigo!
+            Hello, mister or miss reviewer! I have a problem. My beforeEach
+            above is showing the specs/failures screen in a very weird
+            way for me. I've tested this task in another cloned project from
+            scratch and also sent it to my instructor and the error happens
+            only with me!
             
-            Ele não está exibindo a tela completa do Jasmine, somente a
-            logo, versão e, aleatoriamente, os testes nas bolinhas verdes, às
-            vezes nenhuma, às vezes 3, às vezes 6.
-            O problema é que não está exibindo o log, descrevendo os describes
-            e its! Como resolvo isso?
+            My html isn't showing Jasmine's full screen, only the logo, version
+            and, randomly (as expected from the seeds), the little green balls,
+            sometimes none, 3, 6. The problem is the empty log. It's not
+            exibiting the log, it's not writing my "describes" and "its".
 
-            Se ajudar, fiz um gif e coloquei no giphy :)
+            How do I solve this?
+
+            If it helps, I've made a gif and uploded to giphy :)
             https://media.giphy.com/media/2WGEhbGrJK2ppKfFTw/giphy.gif
         */
 
         it('has an entry in the feed', function(done) {
-            let articleTag = document.getElementsByClassName("entry-link")[0];
+            let entryID = $('.feed.entry');
 
-            console.log(articleTag);
-
-            expect(articleTag).toBeGreaterThan(0);
+            expect(entryID).toBeGreaterThan(0);
             done();
         });
     });
@@ -106,16 +110,38 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        beforeEach(function(done) {
+
+        /*
+
+        NOTE:
+
+        I can't really know if the following test is working, due
+        to the error I've described above. Even when I type my expect
+        as "expect(feedOne).toEqual(feedTwo);" it is passing as spec,
+        I can't find errors anymore. This is happening when I
+        use beforeEach anywhere.
+
+        */
+
+        let feedOne;
+        let feedTwo;
+
+        beforeEach(function(done){
             loadFeed(0, function() {
+                feedOne = {entry : $('.feed').html()};
+            });
+            
+            loadFeed(1, function() {
+                feedTwo = {entry : $('.feed').html()};
                 done();
-            })
+            });
         });
 
         it("really changes content", function(done) {
-            //expect
+            expect(feedOne).not.toEqual(feedTwo);
             done();
         })
+
     });
 
 }());

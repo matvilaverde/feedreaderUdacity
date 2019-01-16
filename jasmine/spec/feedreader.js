@@ -41,13 +41,21 @@ $(function() {
         });
     });
 
+    let originalTimeout;
+
     describe('Initial Entries', function() {
         //Asynchronously waits for the feed to load and then begins testing
         beforeEach(function(done) {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL; //Stores original timeout 
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000; //Changes timeout
             loadFeed(0, function() {
                 done();
             });
         });
+
+        afterEach(function() {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout; //Restores timeout to it's original value
+        })
 
         //Tests if there's any entry in the feed, after it's loaded
         it('has an entry in the feed', function(done) {
@@ -63,6 +71,8 @@ $(function() {
 
         //Stores first and second feeds to their variables, asynchronously
         beforeEach(function(done){
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
             loadFeed(0, function() {
                 feedOne = $('.feed').html();
                 loadFeed(1, function() {
@@ -71,6 +81,10 @@ $(function() {
                 });
             });
         });
+
+        afterEach(function() {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+        })
 
         //Tests if content really changed after switching, comparing the first and second ones
         it("really changes content", function(done) {
